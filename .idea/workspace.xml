@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e8acb69d-4b02-413f-b7ea-737872000d78" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/MongoDAO.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/model/LogEvent.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/EnrichmentService.scala" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/MongoService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/scala_compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/scala_compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/config/AppConfig.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/config/AppConfig.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/controller/LogStreamController.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/controller/LogStreamController.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/DeltaLakeDAO.scala" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/KafkaDAO.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/KafkaDAO.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/PostgresDAO.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/PostgresDAO.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/generator/LogGenerator.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/generator/LogGenerator.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/AlertingService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/AlertingService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogParserService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogParserService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogProcessingService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogProcessingService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/SchemaUtils.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/SchemaUtils.scala" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="31YAAejmgw9NIkkPmf5k05tIWLp" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.DebugLogStreamController.executor": "Run",
+    "Application.LogGenerator.executor": "Run",
+    "Application.LogStreamController.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Real-Time-Log-Analytics-System",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0"
+  }
+}]]></component>
+  <component name="RunManager" selected="Application.LogStreamController">
+    <configuration name="DebugLogStreamController" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.loganalytics.controller.DebugLogStreamController" />
+      <module name="real-time-log-analytics.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.loganalytics.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LogGenerator" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.loganalytics.generator.LogGenerator" />
+      <module name="real-time-log-analytics.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.loganalytics.generator.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LogStreamController" type="Application" factoryName="Application" temporary="true">
+      <option name="MAIN_CLASS_NAME" value="com.loganalytics.controller.LogStreamController" />
+      <module name="real-time-log-analytics.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.loganalytics.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.LogStreamController" />
+        <item itemvalue="Application.DebugLogStreamController" />
+        <item itemvalue="Application.LogGenerator" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ScalaProjectSettings">
+    <option name="migrateConfigurationsNotificationShown" value="true" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e8acb69d-4b02-413f-b7ea-737872000d78" name="Changes" comment="" />
+      <created>1755690493893</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1755690493893</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.conf" />
+  </component>
+</project>
