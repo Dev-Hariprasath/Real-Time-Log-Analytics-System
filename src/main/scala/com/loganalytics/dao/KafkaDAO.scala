@@ -1,28 +1,16 @@
 package com.loganalytics.dao
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import com.loganalytics.config.AppConfig
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object KafkaDAO {
-  /** Read raw JSON string messages from Kafka; returns DataFrame with column `raw` */
-  def readFromKafka(spark: SparkSession): DataFrame = {
+  def readLogs(spark: SparkSession): DataFrame = {
     spark.readStream
       .format("kafka")
-      .option("kafka.bootstrap.servers", AppConfig.kafkaBootstrap)
-      .option("subscribe", AppConfig.kafkaSourceTopic)
-      .option("startingOffsets", AppConfig.kafkaStartingOffsets)
+      .option("kafka.bootstrap.servers", AppConfig.kafkaBrokers)
+      .option("subscribe", AppConfig.kafkaTopic)
+      .option("startingOffsets", AppConfig.kafkaOffsets)
+      .option("maxOffsetsPerTrigger", AppConfig.kafkaMaxOffsetsPerTrigger)
       .load()
-      .selectExpr("CAST(value AS STRING) AS raw")
-  }
-
-  /** Write a DataFrame with a string column named `value` to Kafka topic. */
-  def writeToKafkaString(df: DataFrame, topic: String) = {
-    df.selectExpr("CAST(value AS STRING) AS value")
-      .writeStream
-      .format("kafka")
-      .option("kafka.bootstrap.servers", AppConfig.kafkaBootstrap)
-      .option("topic", topic)
-      .option("checkpointLocation", s"${AppConfig.checkpointBasePath}/kafka-$topic")
-      .start()
   }
 }

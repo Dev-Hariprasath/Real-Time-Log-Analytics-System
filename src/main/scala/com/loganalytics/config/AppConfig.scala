@@ -1,33 +1,31 @@
 package com.loganalytics.config
 
-import com.typesafe.config.ConfigFactory
+import com.typesafe.config.{Config, ConfigFactory}
 
 object AppConfig {
-  private val conf = ConfigFactory.load()
-  private val app  = conf.getConfig("app")
+  private val conf: Config = ConfigFactory.load()
 
-  val appName: String = app.getString("name")
-
-  val kafkaBootstrap: String   = app.getString("kafka.bootstrap")
-  val kafkaSourceTopic: String = app.getString("kafka.sourceTopic")
-  val kafkaStartingOffsets: String = app.getString("kafka.startingOffsets")
-
-  val deltaBasePath: String      = app.getString("delta.basePath")
-  val checkpointBasePath: String = app.getString("checkpoint.basePath")
-
-  val windowDuration: String = app.getString("window.duration")
-  val windowSlide: String    = app.getString("window.slide")
-  val watermark: String      = app.getString("watermark")
-
-  val alertErrorRateThreshold: Double = app.getDouble("alerts.errorRateThreshold")
-  val alertP95LatencyThresholdMs: Int = app.getInt("alerts.p95LatencyThresholdMs")
-  val alertsToKafka: Boolean          = app.getBoolean("alerts.toKafka")
-  val alertsKafkaTopic: String        = app.getString("alerts.kafkaTopic")
+  // Kafka
+  val kafkaBrokers: String = conf.getString("app.kafka.brokers")
+  val kafkaTopic: String   = conf.getString("app.kafka.topic")
+  val kafkaOffsets: String = conf.getString("app.kafka.startingOffsets") // earliest/latest
+  val kafkaMaxOffsetsPerTrigger: Int = conf.getInt("app.kafka.maxOffsetsPerTrigger")
 
   // Postgres
-  //val pgUrl: String   = app.getConfig("postgres").getString("url")
-  //val pgUser: String  = app.getConfig("postgres").getString("user")
-  //val pgPass: String  = app.getConfig("postgres").getString("password")
-  //val pgTable: String = app.getConfig("postgres").getString("table")
-}
+  val pgUrl: String       = conf.getString("app.postgres.url")
+  val pgUser: String      = conf.getString("app.postgres.user")
+  val pgPass: String      = conf.getString("app.postgres.password")
+  val pgLogsTable: String = conf.getString("app.postgres.logsTable")
+  val pgAggsTable: String = conf.getString("app.postgres.aggsTable")
 
+  // Streaming
+  val checkpointDir: String = conf.getString("app.streaming.checkpointDir")
+  val trigger: String       = conf.getString("app.streaming.trigger") // e.g. "30 seconds"
+  val watermark: String     = conf.getString("app.streaming.watermark")
+  val window: String        = conf.getString("app.streaming.window")
+
+  // Mongo (for enrichment)
+  val mongoUri: String  = conf.getString("app.mongo.uri")
+  val mongoDb: String   = conf.getString("app.mongo.db")
+  val mongoColl: String = conf.getString("app.mongo.coll")
+}

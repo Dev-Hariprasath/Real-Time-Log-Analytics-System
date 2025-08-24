@@ -1,22 +1,21 @@
-package com.loganalytics.utils
+package com.loganalytics
 
 import org.apache.spark.sql.types._
 
 object SchemaUtils {
-  // JSON schema expected from producers
   val logSchema: StructType = StructType(Seq(
-    StructField("timestamp", StringType),
-    StructField("level", StringType),
-    StructField("service", StringType),
-    StructField("path", StringType),
-    StructField("status", IntegerType),
-    StructField("latencyMs", IntegerType),
-    StructField("msg", StringType),
-    StructField("userId", StringType),
-    StructField("host", StringType),
-    StructField("ip", StringType),
-    StructField("requestId", StringType),
-    StructField("sessionId", StringType)
+    // keep original timestamp as string but parse to Timestamp in parser
+    StructField("timestamp", StringType, true),
+    StructField("level", StringType, true),
+    StructField("service", StringType, true),
+    StructField("path", StringType, true),
+    StructField("status", IntegerType, true),
+    StructField("latencyMs", IntegerType, true),
+    StructField("msg", StringType, true),
+    StructField("userId", StringType, true),
+    StructField("host", StringType, true),
+    StructField("ip", StringType, true),
+    StructField("requestId", StringType, true),
+    StructField("sessionId", StringType, true)
   ))
 }
-

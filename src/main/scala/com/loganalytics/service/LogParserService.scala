@@ -1,33 +1,24 @@
 package com.loganalytics.service
 
-import com.loganalytics.utils.SchemaUtils
-import com.loganalytics.utils.LogLevels
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, SparkSession, functions => F}
+import com.loganalytics.SchemaUtils
 import org.apache.spark.sql.functions._
 
 object LogParserService {
-  def parse(spark: SparkSession, raw: DataFrame): DataFrame = {
+
+  def parse(spark: SparkSession, kafkaDf: DataFrame): DataFrame = {
+
     import spark.implicits._
 
-    val parsed = raw
-      .select(from_json($"raw", SchemaUtils.logSchema).as("d"))
-      .select("d.*")
-      .withColumn("level", upper(coalesce(col("level"), lit(LogLevels.INFO))))
-      //robust timestamp parsing
-      .withColumn(
-        "ts",
-        coalesce(
-          to_timestamp(col("timestamp"), "yyyy-MM-dd'T'HH:mm:ss.SSSX"),
-          to_timestamp(col("timestamp"))
-        )
-      )
-      .filter(col("ts").isNotNull)
+    val parsed = kafkaDf
+      .selectExpr("CAST(value AS STRING) as json")
+      .select(F.from_json(F.col("json"), SchemaUtils.logSchema).as("data"))
+      .select("data.*")
 
-
-      .withColumn("service", coalesce(col("service"), lit("unknown")))
-      .withColumn("latencyMs", coalesce(col("latencyMs"), lit(0)))
-      .filter(col("ts").isNotNull)
-
-    parsed.withColumn("date", to_date(col("ts"))).withColumn("hour", hour(col("ts")))
+    // create typed columns and parse timestamp to event_time
+    parsed
+      .withColumn("event_time", to_timestamp(col("timestamp"))) // expects ISO-like timestamp; adapt format if needed
+      .withColumn("status", col("status").cast("int"))
+      .withColumn("latencyMs", col("latencyMs").cast("int"))
   }
 }

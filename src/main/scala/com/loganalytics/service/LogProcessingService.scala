@@ -1,43 +1,26 @@
 package com.loganalytics.service
 
 import com.loganalytics.config.AppConfig
-import com.loganalytics.utils.LogLevels
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 
 object LogProcessingService {
-  def errorsAndWarnings(df: DataFrame): DataFrame =
-    df.filter(col("level").isin(LogLevels.ERROR, LogLevels.WARN))
-
-  def metricsPerWindow(df: DataFrame): DataFrame = {
-    df.withWatermark("ts", AppConfig.watermark)
-      .groupBy(
-        window(col("ts"), AppConfig.windowDuration, AppConfig.windowSlide),
-        col("service"),
-        col("level")
-      )
+  def aggregate(df: DataFrame): DataFrame = {
+    // expects df to contain event_time: TimestampType and service column
+    df.withWatermark("event_time", AppConfig.watermark)
+      .groupBy(window(col("event_time"), AppConfig.window), col("service"))
       .agg(
-        count(lit(1)).as("count"),
-        avg(col("latencyMs")).cast("double").as("avg_latency"),
-        expr("percentile_approx(latencyMs, 0.95)").cast("double").as("p95_latency")
+        count("*").as("events"),
+        sum(when(col("status") >= 500, 1).otherwise(0)).as("errors"),
+        avg("latencyMs").as("avg_latency")
       )
       .select(
         col("window.start").as("window_start"),
         col("window.end").as("window_end"),
-        col("service"), col("level"), col("count"), col("avg_latency"), col("p95_latency")
+        col("service"),
+        col("events"),
+        col("errors"),
+        col("avg_latency")
       )
-  }
-
-  def errorRateFromMetrics(metrics: DataFrame): DataFrame = {
-    metrics
-      .groupBy(col("window_start"), col("window_end"), col("service"))
-      .agg(
-        sum(when(col("level").isin(LogLevels.ERROR, LogLevels.WARN), col("count")).otherwise(lit(0))).as("error_count"),
-        sum(col("count")).as("total_count"),
-        avg(col("p95_latency")).as("p95_latency_avg")
-      )
-      .withColumn("error_rate", when(col("total_count") === 0, lit(0.0))
-        .otherwise(col("error_count") / col("total_count")))
   }
 }
-

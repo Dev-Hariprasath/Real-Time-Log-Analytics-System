@@ -9,7 +9,7 @@ import scala.util.control.NonFatal
 object LogGenerator {
   def main(args: Array[String]): Unit = {
     val bootstrap = sys.env.getOrElse("KAFKA_BOOTSTRAP", "localhost:9092")
-    val topic = sys.env.getOrElse("KAFKA_TOPIC", "log-topic")
+    val topic = sys.env.getOrElse("KAFKA_TOPIC", "logs")
 
     val props = new Properties()
     props.put("bootstrap.servers", bootstrap)
@@ -42,7 +42,7 @@ object LogGenerator {
 
         val rec = new ProducerRecord[String,String](topic, null, json)
         producer.send(rec)
-        Thread.sleep(300) // ~3 messages/sec
+        Thread.sleep(300)
       }
     } catch {
       case NonFatal(e) =>
@@ -52,4 +52,3 @@ object LogGenerator {
     }
   }
 }
-
