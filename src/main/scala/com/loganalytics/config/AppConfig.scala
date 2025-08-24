@@ -12,9 +12,9 @@ object AppConfig {
   val kafkaMaxOffsetsPerTrigger: Int = conf.getInt("app.kafka.maxOffsetsPerTrigger")
 
   // Postgres
-  val pgUrl: String    = conf.getString("app.postgres.url")
-  val pgUser: String   = conf.getString("app.postgres.user")
-  val pgPass: String   = conf.getString("app.postgres.password")
+  val pgUrl: String       = conf.getString("app.postgres.url")
+  val pgUser: String      = conf.getString("app.postgres.user")
+  val pgPass: String      = conf.getString("app.postgres.password")
   val pgLogsTable: String = conf.getString("app.postgres.logsTable")
   val pgAggsTable: String = conf.getString("app.postgres.aggsTable")
 
@@ -25,8 +25,7 @@ object AppConfig {
   val window: String        = conf.getString("app.streaming.window")
 
   // Mongo (for enrichment)
-  val mongoUri: String = conf.getString("app.mongo.uri")
-  val mongoDb: String  = conf.getString("app.mongo.db")
+  val mongoUri: String  = conf.getString("app.mongo.uri")
+  val mongoDb: String   = conf.getString("app.mongo.db")
   val mongoColl: String = conf.getString("app.mongo.coll")
-
 }
