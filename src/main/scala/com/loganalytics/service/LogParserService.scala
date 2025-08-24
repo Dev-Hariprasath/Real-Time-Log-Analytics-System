@@ -1,7 +1,7 @@
 package com.loganalytics.service
 
-import org.apache.spark.sql.{DataFrame, SparkSession}
 import com.loganalytics.SchemaUtils
+import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 
 object LogParserService {
@@ -24,6 +24,6 @@ object LogParserService {
         )
       )
       .filter(col("event_time").isNotNull)
-      .drop("timestamp")  // Keep only event_time
+      .drop("timestamp")
   }
 }
