@@ -6,7 +6,7 @@ import scala.concurrent.Await
 import scala.concurrent.duration._
 
 object MongoDAO {
-  // Create Mongo client using values from AppConfig
+  // Create Mongo client using values from AppConfig (non-blocking for initialization)
   private val client: MongoClient = MongoClient(AppConfig.mongoUri)
   private val database: MongoDatabase = client.getDatabase(AppConfig.mongoDb)
   private val collection: MongoCollection[Document] = database.getCollection(AppConfig.mongoColl)
