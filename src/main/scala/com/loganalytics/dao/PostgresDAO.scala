@@ -4,7 +4,6 @@ import com.loganalytics.config.AppConfig
 import org.apache.spark.sql.{DataFrame, SaveMode, SparkSession}
 import org.apache.spark.sql.streaming.{StreamingQuery, Trigger}
 import org.apache.spark.sql.functions._
-import java.sql.Timestamp
 
 object PostgresDAO {
 
@@ -19,12 +18,12 @@ object PostgresDAO {
   def writeRawLogs(df: DataFrame): StreamingQuery = {
     df.writeStream
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
-        println(s"Processing raw logs batch $batchId with ${batchDF.count()} records")
+        val count = batchDF.count()
+        println(s"[JdbcWriter] Processing batch $batchId for table ${AppConfig.pgRawTable} with $count records")
 
-        if (!batchDF.isEmpty) {
+        if (count > 0) {
           try {
-            val prepared = prepareForJdbc(batchDF)
-            prepared.write
+            batchDF.write
               .format("jdbc")
               .option("url", AppConfig.pgUrl)
               .option("dbtable", AppConfig.pgRawTable)
@@ -33,16 +32,18 @@ object PostgresDAO {
               .option("driver", "org.postgresql.Driver")
               .mode(SaveMode.Append)
               .save()
-            println(s"Successfully wrote batch $batchId to raw_logs table")
+
+            println(s"[JdbcWriter] ✅ Wrote batch $batchId to ${AppConfig.pgRawTable}")
           } catch {
             case e: Exception =>
-              println(s"Failed to write batch $batchId: ${e.getMessage}")
+              println(s"[JdbcWriter] ❌ Failed to write batch $batchId to ${AppConfig.pgRawTable}: ${e.getMessage}")
               e.printStackTrace()
           }
         }
       }
       .option("checkpointLocation", s"${AppConfig.checkpointDir}/raw")
       .trigger(Trigger.ProcessingTime(AppConfig.trigger))
+      .outputMode("update")
       .start()
   }
 
@@ -61,7 +62,7 @@ object PostgresDAO {
               .option("user", AppConfig.pgUser)
               .option("password", AppConfig.pgPass)
               .option("driver", "org.postgresql.Driver")
-              .mode(SaveMode.Overwrite)
+              .mode(SaveMode.Append)
               .save()
             println(s"Successfully wrote batch $batchId to aggregated_logs table")
           } catch {

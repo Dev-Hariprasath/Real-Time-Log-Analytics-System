@@ -11,7 +11,7 @@ object SchemaUtils {
     StructField("status", IntegerType, true),
     StructField("latencyms", IntegerType, true),
     StructField("msg", StringType, true),
-    StructField("userId", StringType, true),
+    StructField("user_id", StringType, true),
     StructField("host", StringType, true),
     StructField("ip", StringType, true),
     StructField("requestId", StringType, true),
