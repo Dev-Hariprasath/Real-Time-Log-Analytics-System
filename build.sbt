@@ -1,6 +1,5 @@
 ThisBuild / scalaVersion := "2.12.18"
 
-
 scalaVersion := "2.12.18"
 
 libraryDependencies ++= Seq(
@@ -13,5 +12,5 @@ libraryDependencies ++= Seq(
 
 lazy val root = (project in file(".")).settings(
   name := "real-time-log-analytics",
-  version := "0.1.0",
+  version := "0.1.0"
 )
