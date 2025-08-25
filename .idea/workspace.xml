@@ -5,18 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8acb69d-4b02-413f-b7ea-737872000d78" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/RawLogService.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/controller/LogStreamController.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/controller/LogStreamController.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/config/AppConfig.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/config/AppConfig.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/PostgresDAO.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/PostgresDAO.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogParserService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogParserService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/EnrichmentService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/EnrichmentService.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogProcessingService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogProcessingService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/RawLogService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/RawLogService.scala" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/DBInit.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/DBInit.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/SchemaUtils.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/SchemaUtils.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/SchemaUtils$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/SchemaUtils$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/config/AppConfig$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/config/AppConfig$.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/PostgresDAO$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/PostgresDAO$.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$$typecreator1$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$$typecreator1$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$$typecreator2$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$$typecreator2$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogProcessingService$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogProcessingService$.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -80,7 +83,7 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.LogStreamController">
+  <component name="RunManager" selected="Application.LogGenerator">
     <configuration name="DebugLogStreamController" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.loganalytics.controller.DebugLogStreamController" />
       <module name="real-time-log-analytics.main" />
@@ -142,8 +145,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.LogStreamController" />
         <item itemvalue="Application.LogGenerator" />
+        <item itemvalue="Application.LogStreamController" />
         <item itemvalue="Application.com.loganalytics.LogStreamController" />
         <item itemvalue="Application.LogStreamController (1)" />
         <item itemvalue="Application.DebugLogStreamController" />

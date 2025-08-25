@@ -7,9 +7,13 @@ import org.apache.spark.sql.functions._
 
 object EnrichmentService {
 
-  def enrich(spark: SparkSession, df: DataFrame, broadcastedMetadata: Option[Broadcast[Map[String, String]]] = None): DataFrame = {
+  def enrich(
+              spark: SparkSession,
+              df: DataFrame,
+              broadcastedMetadata: Option[Broadcast[Map[String, String]]] = None
+            ): DataFrame = {
 
-    // load metadata from provided broadcast or Mongo; swallow errors and proceed without enrichment
+    // Load metadata from broadcast or MongoDB
     val metadata = try {
       broadcastedMetadata.map(_.value).getOrElse(MongoDAO.loadServiceMetadata())
     } catch {
@@ -23,9 +27,11 @@ object EnrichmentService {
       df
     } else {
       val bc = spark.sparkContext.broadcast(metadata)
-      val enrichUDF = udf((service: String) => bc.value.getOrElse(service, "Unknown"))
-      // Keep all existing columns (including event_time) and add owner
-      df.withColumn("owner", enrichUDF(col("service")))
+
+      // UDF: replace service with friendly name from Mongo if available
+      val enrichUDF = udf((service: String) => bc.value.getOrElse(service, service))
+
+      df.withColumn("service", enrichUDF(col("service")))
     }
   }
 }

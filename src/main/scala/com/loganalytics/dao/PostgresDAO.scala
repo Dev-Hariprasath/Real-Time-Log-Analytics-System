@@ -23,7 +23,8 @@ object PostgresDAO {
 
         if (count > 0) {
           try {
-            batchDF.write
+            val prepared = prepareForJdbc(batchDF)   // ✅ ensure snake_case
+            prepared.write
               .format("jdbc")
               .option("url", AppConfig.pgUrl)
               .option("dbtable", AppConfig.pgRawTable)
@@ -43,9 +44,10 @@ object PostgresDAO {
       }
       .option("checkpointLocation", s"${AppConfig.checkpointDir}/raw")
       .trigger(Trigger.ProcessingTime(AppConfig.trigger))
-      .outputMode("update")
+      .outputMode("append")
       .start()
   }
+
 
   def writeAggregates(df: DataFrame): StreamingQuery = {
     df.writeStream

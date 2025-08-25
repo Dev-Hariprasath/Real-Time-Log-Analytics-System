@@ -29,9 +29,7 @@ object DBInit {
            |  host VARCHAR(100),
            |  ip VARCHAR(50),
            |  request_id VARCHAR(100),
-           |  session_id VARCHAR(100),
-           |  owner VARCHAR(100),
-           |  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+           |  session_id VARCHAR(100)
            |);
            |""".stripMargin
 
@@ -39,16 +37,17 @@ object DBInit {
       val aggsTable =
         s"""
            |CREATE TABLE IF NOT EXISTS ${AppConfig.pgAggsTable} (
+           |  id SERIAL PRIMARY KEY,
            |  window_start TIMESTAMP,
            |  window_end TIMESTAMP,
            |  service VARCHAR(100),
            |  events BIGINT,
            |  errors BIGINT,
-           |  avg_latency DOUBLE PRECISION,
-           |  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-           |  PRIMARY KEY (window_start, window_end, service)
+           |  latency_ms DOUBLE PRECISION,
+           |  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
            |);
            |""".stripMargin
+
 
       // Alerts table
       val alertsTable =
