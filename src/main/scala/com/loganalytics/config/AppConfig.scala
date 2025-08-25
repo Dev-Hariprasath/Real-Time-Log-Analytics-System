@@ -1,9 +1,7 @@
 package com.loganalytics.config
 
 import com.typesafe.config.{Config, ConfigFactory}
-import org.apache.spark.internal.config
 
-import scala.concurrent.duration._
 
 object AppConfig {
   private val conf: Config = ConfigFactory.load()
