@@ -18,7 +18,7 @@ It integrates streaming data from **Kafka** and historical data from **MongoDB**
 
 ```text
 Kafka (Streaming Logs) ----\
-                            >---- Spark Structured Streaming ----> PostgreSQL (Analytics DB) ----> Grafana / Superset ----> Alerts
+                            >---- Spark Structured Streaming ----> PostgreSQL (Analytics DB) ----> Grafana ----> Alerts
 MongoDB (Historical Logs) --/                      
 ```
 
