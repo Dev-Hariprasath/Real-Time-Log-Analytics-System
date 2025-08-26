@@ -1,24 +1,50 @@
 package com.loganalytics.dao
 
 import com.loganalytics.config.AppConfig
-import org.mongodb.scala._
-import scala.concurrent.Await
-import scala.concurrent.duration._
+import com.loganalytics.SchemaUtils
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 object MongoDAO {
-  // Create Mongo client using values from AppConfig (non-blocking for initialization)
-  private val client: MongoClient = MongoClient(AppConfig.mongoUri)
-  private val database: MongoDatabase = client.getDatabase(AppConfig.mongoDb)
-  private val collection: MongoCollection[Document] = database.getCollection(AppConfig.mongoColl)
+  def loadLogs(spark: SparkSession): DataFrame = {
+    println(s"[MongoDAO] ✅ Attempting to load '${AppConfig.mongoDb}.${AppConfig.mongoColl}'")
 
-  def loadServiceMetadata(): Map[String, String] = {
-    val docsFuture = collection.find().toFuture()
-    val docs = Await.result(docsFuture, 10.seconds)
+    val df = spark.read
+      .format("mongodb")
+      .option("spark.mongodb.connection.uri", AppConfig.mongoUri)
+      .option("database", AppConfig.mongoDb)
+      .option("collection", AppConfig.mongoColl)
+      .schema(SchemaUtils.logSchema) // enforce schema
+      .load()
 
-    docs.flatMap { doc =>
-      val service = Option(doc.getString("service"))
-      val owner   = Option(doc.getString("owner"))
-      service.map(svc => svc -> owner.getOrElse("Unknown"))
-    }.toMap
+    println(s"[MongoDAO] Count = ${df.count()}")
+    df.printSchema()
+    df.show(5, truncate = false)
+
+    df
+  }
+
+  def loadServiceMetadata(spark: SparkSession): Map[String, String] = {
+    try {
+      val df = spark.read
+        .format("mongodb")
+        .option("spark.mongodb.connection.uri", AppConfig.mongoUri)
+        .option("database", AppConfig.mongoDb)
+        .option("collection", "service_metadata")
+        .load()
+
+      if (df.columns.contains("service") && df.columns.contains("label")) {
+        df.select("service", "label")
+          .collect()
+          .map(r => r.getString(0) -> r.getString(1))
+          .toMap
+      } else {
+        println(s"[MongoDAO] ⚠️ service_metadata collection missing required columns [service,label]")
+        Map.empty[String, String]
+      }
+    } catch {
+      case e: Throwable =>
+        println(s"[MongoDAO] ⚠️ Could not load service metadata: ${e.getMessage}")
+        Map.empty[String, String]
+    }
   }
 }

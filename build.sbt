@@ -6,8 +6,8 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-sql" % "3.5.1",
   "org.apache.spark" %% "spark-sql-kafka-0-10" % "3.5.1",
   "org.postgresql"   %  "postgresql" % "42.7.3",
-  "org.mongodb.scala" %% "mongo-scala-driver" % "4.11.2",
-  "com.typesafe"     %  "config" % "1.4.3"
+  "com.typesafe"     %  "config" % "1.4.3",
+  "org.mongodb.spark" %% "mongo-spark-connector" % "10.3.0"
 )
 
 lazy val root = (project in file(".")).settings(
