@@ -15,15 +15,16 @@ object PostgresDAO {
     df.select(renameCols: _*)
   }
 
+  // ---------- STREAMING WRITERS (Kafka) ----------
+
   def writeRawLogs(df: DataFrame, source: String = "unknown"): StreamingQuery = {
     df.writeStream
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
         val count = batchDF.count()
         println(s"[JdbcWriter][$source] Processing batch $batchId for table ${AppConfig.pgRawTable} with $count records")
-
         if (count > 0) {
           try {
-            val prepared = prepareForJdbc(batchDF) // ✅ no .withColumn("source")
+            val prepared = prepareForJdbc(batchDF)
             prepared.write
               .format("jdbc")
               .option("url", AppConfig.pgUrl)
@@ -33,7 +34,6 @@ object PostgresDAO {
               .option("driver", "org.postgresql.Driver")
               .mode(SaveMode.Append)
               .save()
-
             println(s"[JdbcWriter][$source] ✅ Wrote batch $batchId to ${AppConfig.pgRawTable}")
           } catch {
             case e: Exception =>
@@ -48,14 +48,12 @@ object PostgresDAO {
       .start()
   }
 
-
-
   def writeAggregates(df: DataFrame): StreamingQuery = {
     df.writeStream
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
-        println(s"Processing aggregates batch $batchId with ${batchDF.count()} records")
-
-        if (!batchDF.isEmpty) {
+        val c = batchDF.count()
+        println(s"[JdbcWriter][aggs] Processing aggregates batch $batchId with $c records")
+        if (c > 0) {
           try {
             val prepared = prepareForJdbc(batchDF)
             prepared.write
@@ -67,10 +65,10 @@ object PostgresDAO {
               .option("driver", "org.postgresql.Driver")
               .mode(SaveMode.Append)
               .save()
-            println(s"Successfully wrote batch $batchId to aggregated_logs table")
+            println(s"[JdbcWriter][aggs] ✅ Wrote batch $batchId to ${AppConfig.pgAggsTable}")
           } catch {
             case e: Exception =>
-              println(s"Failed to write aggregates batch $batchId: ${e.getMessage}")
+              println(s"[JdbcWriter][aggs] ❌ Failed aggregates batch $batchId: ${e.getMessage}")
               e.printStackTrace()
           }
         }
@@ -84,9 +82,9 @@ object PostgresDAO {
   def writeAlerts(df: DataFrame): StreamingQuery = {
     df.writeStream
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
-        println(s"Processing alerts batch $batchId with ${batchDF.count()} records")
-
-        if (!batchDF.isEmpty) {
+        val c = batchDF.count()
+        println(s"[JdbcWriter][alerts] Processing alerts batch $batchId with $c records")
+        if (c > 0) {
           try {
             val prepared = prepareForJdbc(batchDF)
             prepared.write
@@ -98,18 +96,60 @@ object PostgresDAO {
               .option("driver", "org.postgresql.Driver")
               .mode(SaveMode.Append)
               .save()
-            println(s"Successfully wrote batch $batchId to alerts table")
+            println(s"[JdbcWriter][alerts] ✅ Wrote batch $batchId to ${AppConfig.pgAlertsTable}")
           } catch {
             case e: Exception =>
-              println(s"Failed to write alerts batch $batchId: ${e.getMessage}")
+              println(s"[JdbcWriter][alerts] ❌ Failed alerts batch $batchId: ${e.getMessage}")
               e.printStackTrace()
           }
         }
       }
       .option("checkpointLocation", s"${AppConfig.checkpointDir}/alerts")
       .trigger(Trigger.ProcessingTime(AppConfig.trigger))
+      .outputMode("append")
       .start()
   }
+
+  // ---------- BATCH WRITERS (Mongo) ----------
+
+  /** Generic batch writer for Mongo-derived DataFrames */
+  def writeBatch(df: DataFrame, table: String, source: String): Unit = {
+    val count = df.count()
+    println(s"[JdbcWriter][$source] Preparing to write $count records to $table")
+    if (count > 0) {
+      try {
+        val prepared = prepareForJdbc(df)
+        prepared.write
+          .format("jdbc")
+          .option("url", AppConfig.pgUrl)
+          .option("dbtable", table)
+          .option("user", AppConfig.pgUser)
+          .option("password", AppConfig.pgPass)
+          .option("driver", "org.postgresql.Driver")
+          .mode(SaveMode.Append)
+          .save()
+        println(s"[JdbcWriter][$source] ✅ Successfully wrote $count records to $table")
+      } catch {
+        case e: Exception =>
+          println(s"[JdbcWriter][$source] ❌ Failed to write to $table: ${e.getMessage}")
+          e.printStackTrace()
+      }
+    } else {
+      println(s"[JdbcWriter][$source] ℹ️ No records to write")
+    }
+  }
+
+  // Convenience wrappers for Mongo batch paths
+  def writeMongoLogs(df: DataFrame): Unit =
+    writeBatch(df, AppConfig.pgRawTable, "mongo-raw")
+
+  def writeMongoAggregates(df: DataFrame): Unit =
+    writeBatch(df, AppConfig.pgAggsTable, "mongo-aggs")
+
+  def writeMongoAlerts(df: DataFrame): Unit =
+    writeBatch(df, AppConfig.pgAlertsTable, "mongo-alerts")
+
+  // ---------- READERS ----------
 
   def readAggregates(spark: SparkSession): DataFrame = {
     val df = spark.read
@@ -121,7 +161,6 @@ object PostgresDAO {
       .option("driver", "org.postgresql.Driver")
       .load()
 
-    // Convert snake_case from Postgres back to the streaming camelCase schema
     df.select(
       col("window_start").as("windowStart"),
       col("window_end").as("windowEnd"),

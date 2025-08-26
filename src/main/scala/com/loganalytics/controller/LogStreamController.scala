@@ -4,7 +4,8 @@ import com.loganalytics.SchemaUtils
 import com.loganalytics.config.AppConfig
 import com.loganalytics.dao.{KafkaDAO, MongoDAO, PostgresDAO}
 import com.loganalytics.service.{LogParserService, MongoLogService, RawLogService}
-import org.apache.spark.sql.{Row, SparkSession}
+import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import org.apache.spark.sql.functions._
 
 object LogStreamController {
 
@@ -20,15 +21,71 @@ object LogStreamController {
       .config("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
       .getOrCreate()
 
-    spark.sparkContext.setLogLevel("WARN")
+    import spark.implicits._
+    spark.sparkContext.setLogLevel("ERROR")
+
+    // Tunables (consider moving to AppConfig)
+    val watermarkDur        = "5 minutes"
+    val windowDur           = "1 minute"
+    val slideDur            = "1 minute"
+    val latencyThresholdMs  = 2000 // alerts when latency_ms > this
+
+    // ---------- Helper builders ----------
+
+    def buildAggregates(df: DataFrame, withWatermark: Boolean): DataFrame = {
+      val base = if (withWatermark) df.withWatermark("event_time", watermarkDur) else df
+      base
+        .groupBy(
+          window(col("event_time"), windowDur, slideDur),
+          col("service")
+        )
+        .agg(
+          count(lit(1)).as("events"),
+          sum(when(col("status") >= 500, 1).otherwise(0)).cast("long").as("errors"),
+          avg(col("latency_ms")).cast("double").as("latency_ms")
+        )
+        .select(
+          col("window.start").as("windowStart"),
+          col("window.end").as("windowEnd"),
+          col("service"),
+          col("events").cast("long").as("events"),
+          col("errors").cast("long").as("errors"),
+          col("latency_ms").cast("double").as("latency_ms")
+        )
+    }
+
+    def buildAlerts(df: DataFrame): DataFrame = {
+      df
+        .filter(col("status") >= 500 || col("latency_ms") > lit(latencyThresholdMs))
+        .withColumn("alert_time", current_timestamp())
+        .select(
+          col("event_time"),
+          col("alert_time"),
+          col("service"),
+          col("status").cast("int").as("status"),
+          col("msg"),
+          col("request_id"),
+          col("host")
+        )
+    }
 
     try {
-      // --- Kafka (streaming)
+      // ---------- Kafka (streaming) ----------
       val kafkaStream = KafkaDAO.readLogs(spark)
-      val parsedKafka = LogParserService.parse(spark, kafkaStream)
-      val rawKafkaLogs = RawLogService.prepare(parsedKafka)
+      val parsedKafka = LogParserService.parse(spark, kafkaStream)        // your parser
+      val rawKafka    = RawLogService.prepare(parsedKafka)                // canonical schema
 
-      // --- Mongo (batch, optional)
+      // Kafka: raw → Postgres
+      val qRawKafka   = PostgresDAO.writeRawLogs(rawKafka, source = "kafka")
+
+      // Kafka: aggregates & alerts (streaming)
+      val kafkaAggs   = buildAggregates(rawKafka, withWatermark = true)
+      val kafkaAlerts = buildAlerts(rawKafka)
+
+      val qAggsKafka  = PostgresDAO.writeAggregates(kafkaAggs)
+      val qAlertsKafka= PostgresDAO.writeAlerts(kafkaAlerts)
+
+      // ---------- Mongo (batch, optional) ----------
       val mongoBatch = try {
         MongoDAO.loadLogs(spark)
       } catch {
@@ -38,26 +95,28 @@ object LogStreamController {
       }
 
       if (hasRows(mongoBatch)) {
-        val rawMongoLogs = RawLogService.prepare(MongoLogService.prepare(mongoBatch))
-        println(s"[Mongo] ✅ Writing ${rawMongoLogs.count()} rows to Postgres (batch, source=mongo)")
-        rawMongoLogs
-          .write
-          .format("jdbc")
-          .option("url", AppConfig.pgUrl)
-          .option("dbtable", AppConfig.pgRawTable)
-          .option("user", AppConfig.pgUser)
-          .option("password", AppConfig.pgPass)
-          .option("driver", "org.postgresql.Driver")
-          .mode("append")
-          .save()
-        println(s"[JdbcWriter][mongo] ✅ Wrote ${rawMongoLogs.count()} rows to ${AppConfig.pgRawTable}")
+        // Normalize and compute analytics
+        val normalizedMongo = MongoLogService.prepare(mongoBatch) // ensure event_time exists
+        val rawMongo        = RawLogService.prepare(normalizedMongo).cache()
+
+        println(s"[Mongo] ✅ Loaded ${rawMongo.count()} rows; writing raw+aggs+alerts to Postgres…")
+
+        // Mongo: raw → Postgres (batch)
+        PostgresDAO.writeMongoLogs(rawMongo)
+
+        // Mongo: aggregates & alerts (batch)
+        val mongoAggs   = buildAggregates(rawMongo, withWatermark = false)
+        val mongoAlerts = buildAlerts(rawMongo)
+
+        PostgresDAO.writeMongoAggregates(mongoAggs)
+        PostgresDAO.writeMongoAlerts(mongoAlerts)
+
+        rawMongo.unpersist()
       } else {
         println("[Mongo] ℹ️ No rows available")
       }
 
-      // --- Kafka continues streaming
-      PostgresDAO.writeRawLogs(rawKafkaLogs, source = "kafka")
-
+      // Keep streaming queries alive
       spark.streams.awaitAnyTermination()
 
     } catch {
