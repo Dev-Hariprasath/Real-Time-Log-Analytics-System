@@ -15,15 +15,15 @@ object PostgresDAO {
     df.select(renameCols: _*)
   }
 
-  def writeRawLogs(df: DataFrame): StreamingQuery = {
+  def writeRawLogs(df: DataFrame, source: String = "unknown"): StreamingQuery = {
     df.writeStream
       .foreachBatch { (batchDF: DataFrame, batchId: Long) =>
         val count = batchDF.count()
-        println(s"[JdbcWriter] Processing batch $batchId for table ${AppConfig.pgRawTable} with $count records")
+        println(s"[JdbcWriter][$source] Processing batch $batchId for table ${AppConfig.pgRawTable} with $count records")
 
         if (count > 0) {
           try {
-            val prepared = prepareForJdbc(batchDF)   // ✅ ensure snake_case
+            val prepared = prepareForJdbc(batchDF) // ✅ no .withColumn("source")
             prepared.write
               .format("jdbc")
               .option("url", AppConfig.pgUrl)
@@ -34,19 +34,20 @@ object PostgresDAO {
               .mode(SaveMode.Append)
               .save()
 
-            println(s"[JdbcWriter] ✅ Wrote batch $batchId to ${AppConfig.pgRawTable}")
+            println(s"[JdbcWriter][$source] ✅ Wrote batch $batchId to ${AppConfig.pgRawTable}")
           } catch {
             case e: Exception =>
-              println(s"[JdbcWriter] ❌ Failed to write batch $batchId to ${AppConfig.pgRawTable}: ${e.getMessage}")
+              println(s"[JdbcWriter][$source] ❌ Failed to write batch $batchId to ${AppConfig.pgRawTable}: ${e.getMessage}")
               e.printStackTrace()
           }
         }
       }
-      .option("checkpointLocation", s"${AppConfig.checkpointDir}/raw")
+      .option("checkpointLocation", s"${AppConfig.checkpointDir}/raw_$source")
       .trigger(Trigger.ProcessingTime(AppConfig.trigger))
       .outputMode("append")
       .start()
   }
+
 
 
   def writeAggregates(df: DataFrame): StreamingQuery = {
@@ -108,5 +109,47 @@ object PostgresDAO {
       .option("checkpointLocation", s"${AppConfig.checkpointDir}/alerts")
       .trigger(Trigger.ProcessingTime(AppConfig.trigger))
       .start()
+  }
+
+  def readAggregates(spark: SparkSession): DataFrame = {
+    val df = spark.read
+      .format("jdbc")
+      .option("url", AppConfig.pgUrl)
+      .option("dbtable", AppConfig.pgAggsTable)
+      .option("user", AppConfig.pgUser)
+      .option("password", AppConfig.pgPass)
+      .option("driver", "org.postgresql.Driver")
+      .load()
+
+    // Convert snake_case from Postgres back to the streaming camelCase schema
+    df.select(
+      col("window_start").as("windowStart"),
+      col("window_end").as("windowEnd"),
+      col("service"),
+      col("events").cast("long"),
+      col("errors").cast("long"),
+      col("latency_ms").cast("double")
+    )
+  }
+
+  def readAlerts(spark: SparkSession): DataFrame = {
+    val df = spark.read
+      .format("jdbc")
+      .option("url", AppConfig.pgUrl)
+      .option("dbtable", AppConfig.pgAlertsTable)
+      .option("user", AppConfig.pgUser)
+      .option("password", AppConfig.pgPass)
+      .option("driver", "org.postgresql.Driver")
+      .load()
+
+    df.select(
+      col("event_time").cast("timestamp").as("event_time"),
+      col("alert_time").cast("timestamp").as("alert_time"),
+      col("service"),
+      col("status").cast("int").as("status"),
+      col("msg"),
+      col("request_id").as("request_id"),
+      col("host")
+    )
   }
 }
