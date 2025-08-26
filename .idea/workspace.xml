@@ -5,56 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e8acb69d-4b02-413f-b7ea-737872000d78" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/MongoLogService.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__io_projectreactor_reactor_core_3_5_0_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_mongodb_bson_4_11_2_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_mongodb_bson_record_codec_4_11_2_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_mongodb_mongodb_driver_core_4_11_2_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_mongodb_mongodb_driver_reactivestreams_4_11_2_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_mongodb_scala_mongo_scala_bson_2_12_4_11_2_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_mongodb_scala_mongo_scala_driver_2_12_4_11_2_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/sbt__org_reactivestreams_reactive_streams_1_0_4_jar.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Real-Time-Log-Analytics-System/real-time-log-analytics.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Real-Time-Log-Analytics-System/real-time-log-analytics.main.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules/Real-Time-Log-Analytics-System/real-time-log-analytics.test.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/Real-Time-Log-Analytics-System/real-time-log-analytics.test.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.sbt" beforeDir="false" afterPath="$PROJECT_DIR$/build.sbt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/controller/LogStreamController.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/controller/LogStreamController.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/MongoDAO.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/MongoDAO.scala" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/PostgresDAO.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/dao/PostgresDAO.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/EnrichmentService.scala" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogParserService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogParserService.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogProcessingService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/LogProcessingService.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/MongoService.scala" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/RawLogService.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/service/RawLogService.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/SchemaUtils.scala" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/scala/com/loganalytics/utils/SchemaUtils.scala" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/application.conf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/SchemaUtils$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/SchemaUtils$.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/SchemaUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/SchemaUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/MongoDAO$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/MongoDAO$.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/MongoDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/MongoDAO.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/PostgresDAO$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/PostgresDAO$.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/PostgresDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/dao/PostgresDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/EnrichmentService$.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogParserService$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogParserService$.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogParserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogParserService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogProcessingService$.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/LogProcessingService$.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/MongoService$.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/classes/com/loganalytics/service/MongoService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/inputs" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/inputs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/output" beforeDir="false" afterPath="$PROJECT_DIR$/target/scala-2.12/update/update_cache_2.12/output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/_global/_global/csrLogger/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/_global/csrLogger/_global/streams/out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/_global/_global/dumpStructure/_global/streams/out" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/_global/dumpStructure/_global/streams/out" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/input_dsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/input_dsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/output_dsp" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/dependencyPositions/_global/streams/update_cache_2.12/output_dsp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/inputs" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/inputs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/output" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/_global/updateClassifiers/_global/streams/update_cache_2.12/output" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/compile/externalDependencyClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/externalDependencyClasspath/_global/streams/export" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/compile/managedClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/compile/managedClasspath/_global/streams/export" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/runtime/externalDependencyClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/runtime/externalDependencyClasspath/_global/streams/export" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/runtime/managedClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/runtime/managedClasspath/_global/streams/export" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/test/externalDependencyClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/test/externalDependencyClasspath/_global/streams/export" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/streams/test/managedClasspath/_global/streams/export" beforeDir="false" afterPath="$PROJECT_DIR$/target/streams/test/managedClasspath/_global/streams/export" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +74,7 @@
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;
   }
 }</component>
-  <component name="RunManager" selected="Application.LogStreamController">
+  <component name="RunManager" selected="Application.LogGenerator">
     <configuration name="DebugLogStreamController" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="com.loganalytics.controller.DebugLogStreamController" />
       <module name="real-time-log-analytics.main" />
@@ -179,8 +136,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.LogStreamController" />
         <item itemvalue="Application.LogGenerator" />
+        <item itemvalue="Application.LogStreamController" />
         <item itemvalue="Application.com.loganalytics.LogStreamController" />
         <item itemvalue="Application.LogStreamController (1)" />
         <item itemvalue="Application.DebugLogStreamController" />
