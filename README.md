@@ -22,7 +22,7 @@ Kafka (Streaming Logs) ----\
 MongoDB (Historical Logs) --/                      
 ```
 
-![Architecture](Asserts/Images/dashboard.png)
+![Architecture](Asserts/Images/dashboard1.png)
 
 ---
 
