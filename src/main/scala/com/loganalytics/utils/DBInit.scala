@@ -69,11 +69,11 @@ object DBInit {
       stmt.executeUpdate(aggsTable)
       stmt.executeUpdate(alertsTable)
 
-      println(s"[DBInit] ✅ All tables created successfully")
+      println(s"[DBInit] All tables created successfully")
 
     } catch {
       case e: Exception =>
-        println(s"[DBInit] ❌ Error: ${e.getMessage}")
+        println(s"[DBInit] Error: ${e.getMessage}")
         e.printStackTrace()
     } finally {
       if (stmt != null) stmt.close()

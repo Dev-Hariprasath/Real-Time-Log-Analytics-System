@@ -4,19 +4,18 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 
 object AlertingService {
-  // simple example: create small alert rows for error statuses
-  def detectErrors(df: DataFrame): DataFrame = {
-    val withEventTime = if (df.columns.contains("event_time")) df else df.withColumn("event_time", to_timestamp(col("timestamp")))
-    withEventTime
-      .filter(col("status") >= 500)
+  /** Detect alerts based on error status or high latency */
+  def detectAlerts(df: DataFrame, latencyThresholdMs: Int): DataFrame = {
+    df.filter(col("status") >= 500 || col("latency_ms") > latencyThresholdMs)
+      .withColumn("alert_time", current_timestamp())
       .select(
         col("event_time"),
+        col("alert_time"),
         col("service"),
         col("status"),
         col("msg"),
-        col("requestId"),
+        col("request_id"),
         col("host")
       )
-      .withColumn("alert_time", current_timestamp())
   }
 }

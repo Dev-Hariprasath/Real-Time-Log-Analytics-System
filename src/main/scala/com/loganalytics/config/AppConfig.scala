@@ -22,11 +22,11 @@ object AppConfig {
 
   // Streaming
   val checkpointDir: String = conf.getString("app.streaming.checkpointDir")
-  val trigger: String       = conf.getString("app.streaming.trigger") // e.g. "30 seconds"
-  val watermark: String     = conf.getString("app.streaming.watermark") // e.g. "2 minutes"
-  val window: String        = conf.getString("app.streaming.window") // e.g. "1 minute"
+  val trigger: String       = conf.getString("app.streaming.trigger")
+  val watermark: String     = conf.getString("app.streaming.watermark")
+  val window: String        = conf.getString("app.streaming.window")
 
-  // Mongo (for enrichment) - optional
+  // Mongo
   val mongoUri: String  = conf.getString("app.mongo.uri")
   val mongoDb: String   = conf.getString("app.mongo.db")
   val mongoColl: String = conf.getString("app.mongo.coll")

@@ -1,30 +1,9 @@
-package com.loganalytics.dao
+package com.loganalytics.service
 
-import com.loganalytics.config.AppConfig
-import com.loganalytics.SchemaUtils
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 
-object MongoDAO {
-
-  def loadLogs(spark: SparkSession): DataFrame = {
-    println(s"[MongoDAO] Attempting to load '${AppConfig.mongoDb}.${AppConfig.mongoColl}'")
-
-    val df = spark.read
-      .format("mongodb")
-      .option("spark.mongodb.connection.uri", AppConfig.mongoUri)
-      .option("database", AppConfig.mongoDb)
-      .option("collection", AppConfig.mongoColl)
-      .schema(SchemaUtils.logSchema) // enforce schema
-      .load()
-
-    println(s"[MongoDAO] Count = ${df.count()}")
-    df.printSchema()
-    df.show(5, truncate = false)
-
-    df
-  }
-
+object AggregationService {
 
   def buildAggregates(df: DataFrame, withWatermark: Boolean, spark: SparkSession): DataFrame = {
     import spark.implicits._
@@ -55,3 +34,4 @@ object MongoDAO {
       )
   }
 }
+
