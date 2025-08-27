@@ -4,10 +4,9 @@ import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 
 object MongoLogService {
-
+  /** Clean MongoDB documents by dropping internal fields and casting */
   def prepare(df: DataFrame): DataFrame = {
-    df
-      .drop("_id", "_class")
+    df.drop("_id", "_class")
       .select(
         col("timestamp").cast("string"),
         col("level").cast("string"),

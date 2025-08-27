@@ -4,7 +4,7 @@ import org.apache.spark.sql.types._
 
 object SchemaUtils {
 
-  // JSON schema for parsing Kafka payloads (kept as-is)
+  /** Kafka / Mongo JSON schema */
   val logSchema: StructType = StructType(Seq(
     StructField("timestamp", StringType, true),
     StructField("level", StringType, true),
@@ -20,7 +20,7 @@ object SchemaUtils {
     StructField("sessionId", StringType, true)
   ))
 
-  // Unified raw schema AFTER normalization (used for union + JDBC)
+  /** Normalized schema after transformation */
   val rawUnifiedSchema: StructType = StructType(Seq(
     StructField("event_time", TimestampType, true),
     StructField("level", StringType, true),
@@ -35,4 +35,5 @@ object SchemaUtils {
     StructField("request_id", StringType, true),
     StructField("session_id", StringType, true)
   ))
+
 }
