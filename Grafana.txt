@@ -1,0 +1,60 @@
+Log Levels:
+
+SELECT
+  level AS log_level,
+  COUNT(*) AS count
+FROM public.raw_logs
+WHERE $__timeFilter(event_time)
+GROUP BY level
+ORDER BY count DESC
+
+Top Services by Event Volume:
+
+SELECT
+  service,
+  SUM(events) AS total_events
+FROM aggregated_logs 
+WHERE $__timeFilter(window_start)
+GROUP BY service
+ORDER BY service,total_events DESC
+
+Latency_Ms
+
+SELECT
+  window_start AS "time",
+  service,
+  latency_ms AS "Average Latency (ms)"
+FROM aggregated_logs 
+WHERE $__timeFilter(window_start)
+ORDER BY window_start ASC
+
+Top services By Error Count
+
+SELECT
+  service,
+  SUM(errors) AS total_errors
+FROM aggregated_logs 
+WHERE $__timeFilter(window_start)
+GROUP BY service
+ORDER BY total_errors DESC
+
+Event Volume
+
+SELECT
+  window_start AS "time",
+  service,
+  events AS "Event Count"
+FROM aggregated_logs 
+WHERE $__timeFilter(window_start)
+ORDER BY window_start ASC
+
+Error Count
+
+SELECT DISTINCT ON (service)
+  service,
+  errors,
+  window_start AS "time"
+FROM aggregated_logs 
+WHERE $__timeFilter(window_start)
+ORDER BY service, window_start DESC
+

@@ -9,7 +9,7 @@ object AppConfig {
   // Kafka
   val kafkaBrokers: String = conf.getString("app.kafka.brokers")
   val kafkaTopic: String   = conf.getString("app.kafka.topic")
-  val kafkaOffsets: String = conf.getString("app.kafka.startingOffsets") // earliest/latest
+  val kafkaOffsets: String = conf.getString("app.kafka.startingOffsets")
   val kafkaMaxOffsetsPerTrigger: Int = conf.getInt("app.kafka.maxOffsetsPerTrigger")
 
   // Postgres
