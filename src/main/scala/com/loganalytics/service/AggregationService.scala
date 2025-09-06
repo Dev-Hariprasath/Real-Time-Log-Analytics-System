@@ -4,7 +4,6 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.sql.functions._
 
 object AggregationService {
-
   def buildAggregates(df: DataFrame, withWatermark: Boolean, spark: SparkSession): DataFrame = {
     import spark.implicits._
 
