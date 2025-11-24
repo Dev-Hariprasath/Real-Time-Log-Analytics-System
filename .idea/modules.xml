@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Real-Time-Log-Analytics-System/real-time-log-analytics.iml" filepath="$PROJECT_DIR$/.idea/modules/Real-Time-Log-Analytics-System/real-time-log-analytics.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/real-time-log-analytics-build.iml" filepath="$PROJECT_DIR$/.idea/modules/real-time-log-analytics-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/real-time-log-analytics.real-time-log-analytics-build.iml" filepath="$PROJECT_DIR$/.idea/modules/real-time-log-analytics.real-time-log-analytics-build.iml" />
     </modules>
   </component>
 </project>
